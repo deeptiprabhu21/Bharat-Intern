@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    <style>
+
+   body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background-image: url('weather.jpg');
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   }
+        .container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8); 
+            padding: 20px;
+            border-radius: 10px;
+        }
+ </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Check Current Weather</h1>
+        <form id="location-form">
+            <input type="text" id="location-input" placeholder="Enter your location">
+            <button type="submit">Get Weather</button>
+        </form>
+        <div id="weather-info"></div>
+         </div>
+ <script>
+    const apiKey = "9a81d8202b52b246f6da65489cdcc026";
+        const apiUrl = 'https://api.openweathermap.org/data/2.5/weather';
+
+        const locationForm = document.getElementById('location-form');
+
+        locationForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const locationInput = document.getElementById('location-input').value.trim();
+            if (locationInput) {
+                try {
+                    const response = await fetch(`${apiUrl}?q=${locationInput}&appid=${apiKey}&units=metric`);
+                    const data = await response.json();
+                    displayWeather(data);
+                } catch (error) {
+                    console.error('Error fetching weather data:', error);
+                    alert('Error fetching weather data. Please try again later.');
+                }
+            } else {
+                alert('Please enter the location.');
+            }
+        });
+ const displayWeather = (data) => {
+            const weatherInfoDiv = document.getElementById('weather-info');
+            const weatherIcon = document.getElementById('weather-icon');
+            const temperature = data.main.temp;
+            const description = data.weather[0].description;
+            const iconCode = data.weather[0].icon;
+         weatherInfoDiv.innerHTML = `
+                <p>Temperature: ${temperature}°C</p>
+                <p>Weather: ${description}</p>
+            `;
+         };
+</script>
+</body>
+</html>
